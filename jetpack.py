@@ -36,7 +36,7 @@ def setup_links(source_base_dir, link_base_dir):
                 pass
             
             for fn in filenames:
-                if fn == 'README.md': continue
+                if fn == 'README.md' or fn.startswith('.') : continue
                 source_path = os.path.join(dirpath, fn)
                 link_path = os.path.join(link_base_path, fn)
 
@@ -58,10 +58,11 @@ def relink_scaffolding():
 def update_scaffolding():
     cwd = os.getcwd()
     os.chdir('scaffolding')
-    res = os.system('git pull --ff-only')
+    res1 = os.system('git submodule init')
+    res2 = os.system('git submodule update')
     os.chdir(cwd)
 
-    if res != 0:
+    if res != 0 or res2 != 0:
         print "Failed to pull changes.. updating links anyways"
 
     relink_scaffolding()
@@ -83,12 +84,28 @@ def init_project(project_name, scaffold_repo = None):
         print >>sys.stderr, "Error: Directory %s already exists" % (project_name,)
         sys.exit(1)
 
+    os.chdir(project_path)
+    git_init_res = os.system("git init")
+    if git_init_res != 0:
+        print >>sys.stderr, "Abort: Could not instantiate git repository in %s" % (project_path,)
+        sys.exit(1)
+
     print "\nTrying to clone scaffolding from %s" % (scaffold_repo,)
-    clone_exit_code = os.system("git clone %s %s" % (scaffold_repo,scaffolding_dir))
+    clone_exit_code = os.system("git submodule add %s %s" % (scaffold_repo,scaffolding_dir))
+    os.system("git commit -am 'Add scaffolding submodule'")
+    os.chdir(cwd)
+
     clone_succeded = clone_exit_code == 0 and True or False
 
     if clone_succeded:
         setup_links(scaffolding_dir, project_path)
+        print
+        os.chdir(project_path)
+        os.system("git add .")
+        os.system("git commit -m 'Link in scaffolding files'")
+        os.chdir(cwd)
+
+    print "\nDone!"
 
 def main():
     args = parser.parse_args()
