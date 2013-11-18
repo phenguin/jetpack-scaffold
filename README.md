@@ -16,5 +16,5 @@ To install:
     * cd ~/code
     * jetpack init --project PROJECTNAME
     * cd PROJECTNAME
-    * vagrant up --provision
+    * vagrant up
 
