@@ -1,18 +1,20 @@
 jetpack
 =======
 
-Jetpack project initialization stuff
+Project scaffolding generator for a python based web stack.
 
-## Install
-Requirements: vagrant, python
+### Install
+Requirements: python, vagrant, virtualbox
 
-git clone https://github.com/phenguin/jetpack SOMEDIR/jetpack
-ln -s SOMEDIR/jetpack/jetpack.py [SOMEWHEREONYOURPATH]/jetpack
+To install:
 
-## Usage
+    * git clone https://github.com/phenguin/jetpack SOMEDIR/jetpack
+    * ln -s SOMEDIR/jetpack/jetpack.py [SOMEWHEREONYOURPATH]/jetpack
 
-cd ~/code
-jetpack init --project PROJECTNAME
-cd PROJECTNAME
-vagrant up --provision
+### Usage
+
+    * cd ~/code
+    * jetpack init --project PROJECTNAME
+    * cd PROJECTNAME
+    * vagrant up --provision
 
