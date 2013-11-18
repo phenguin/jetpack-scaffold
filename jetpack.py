@@ -15,7 +15,7 @@ while os.path.islink(abs_file_path):
 root_dir = os.path.split(abs_file_path)[0]
 print "__file__: ", __file__
 print "root_dir: ", root_dir
-template_dir = os.path.join(root_dir, 'template')
+scaffolding_dir = os.path.join(root_dir, 'scaffolding')
 
 parser = argparse.ArgumentParser(description = 'Jetpack deploy script')
 parser.add_argument('command', type=str)
@@ -35,7 +35,7 @@ def init_project(project_name):
     print "Copying template into new project root"
 
     # Better way to do this?
-    os.system("cp -r %s/* %s" % (template_dir, project_path))
+    os.system("cp -r %s/* %s" % (scaffolding_dir, project_path))
 
 def main():
     args = parser.parse_args()
