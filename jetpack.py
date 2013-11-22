@@ -23,6 +23,8 @@ parser.add_argument('--project', type=str)
 # TODO: Figure out how to make this arg optional
 parser.add_argument('--scaffold-repo', type=str, default = 'https://github.com/phenguin/jetpack')
 
+# TODO: Use sensible variable names here.. getting hard to read
+# TODO: Create .jetpack file marking root so commands can be run from anywhere in repo
 def setup_links(source_base_dir, link_base_dir):
     print "\nLinking scaffolding files to project dir."
     for dirpath, dirnames, filenames in os.walk(source_base_dir):
@@ -39,6 +41,9 @@ def setup_links(source_base_dir, link_base_dir):
                 if fn == 'README.md' or fn.startswith('.') : continue
                 source_path = os.path.join(dirpath, fn)
                 link_path = os.path.join(link_base_path, fn)
+                rel_dirpath = os.path.relpath(dirpath, link_base_dir)
+                rel_to_base_dir = os.path.relpath(link_base_dir, link_base_path)
+                rel_source_path = os.path.join(rel_to_base_dir, rel_dirpath, fn)
 
                 if os.path.exists(link_path):
                     if os.path.islink(link_path):
@@ -47,8 +52,9 @@ def setup_links(source_base_dir, link_base_dir):
                         print >>sys.stderr, "Aborting.. Not overwriting non-link file: %s" % (link_path,)
                         sys.exit(1)
 
-                print "Linking %s --> %s" % (source_path, link_path)
-                os.symlink(source_path, link_path)
+                print "Linking %s --> %s" % (rel_source_path, link_path)
+                rel_source_path
+                os.symlink(rel_source_path, link_path)
 
 def relink_scaffolding():
     link_path = os.getcwd()
